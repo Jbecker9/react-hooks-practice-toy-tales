@@ -1,9 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ToyCard from "./ToyCard";
 
-function ToyContainer() {
+function ToyContainer({ toyState, toys }) {
+  useEffect(()=>{
+    fetch("http://localhost:3001/toys")
+      .then((r)=>r.json())
+      .then(toyData => toyState(toyData))
+  }, [])
+
   return (
-    <div id="toy-collection">{/* Render the collection of ToyCards */}</div>
+    <div id="toy-collection">{toys.map((toy)=>
+      <ToyCard key={toy.id} toy={toy}/>
+    )}</div>
   );
 }
 
