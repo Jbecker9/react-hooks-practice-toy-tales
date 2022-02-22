@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ToyCard from "./ToyCard";
 
-function ToyContainer({ toyState, toys }) {
-  const [toyLikes, setToyLikes] = useState([0])
+function ToyContainer({ toyState, toys, toyLikes, toyLikeFilterState, setToyLikes }) {
 
   function delToy(prop){
     const delToyArr = toys.filter((toy)=> prop !== toy.id)
@@ -16,13 +15,17 @@ function ToyContainer({ toyState, toys }) {
   }, [])
 
   function newLikes(prop){
-    setToyLikes(prop.likes + 1)
+    setToyLikes(prop.likes+1)
+    // console.log(toyLikes)
     fetch(`http://localhost:3001/toys/${prop.id}`,{
       method: "PATCH",
       headers:{
         "Content-Type": "application/json"
-      }
+      },
+      body: JSON.stringify({likes: toyLikes})
     })
+      .then((r)=>r.json())
+      .then((newToyLikes) => toyLikeFilterState(newToyLikes))
   }
 
   return (
