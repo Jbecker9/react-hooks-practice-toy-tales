@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import ToyCard from "./ToyCard";
 
 function ToyContainer({ toyState, toys, toyLikes, toyLikeFilterState, setToyLikes }) {
@@ -15,14 +15,12 @@ function ToyContainer({ toyState, toys, toyLikes, toyLikeFilterState, setToyLike
   }, [])
 
   function newLikes(prop){
-    setToyLikes(prop.likes+1)
-    // console.log(toyLikes)
     fetch(`http://localhost:3001/toys/${prop.id}`,{
       method: "PATCH",
       headers:{
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({likes: toyLikes})
+      body: JSON.stringify({likes: prop.likes + 1})
     })
       .then((r)=>r.json())
       .then((newToyLikes) => toyLikeFilterState(newToyLikes))
